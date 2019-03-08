@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title>bankcode api test</title>
+  </head>
+
+  <body>
+    <h1>銀行検索</h1>
+    銀行名: <input type="text" name="name" value="" id="js-searchForBank">
+    <ul id="js-bankData"></ul>
+
+    <h1>支店検索</h1>
+    銀行コード: <input type="text" name="name" value="" class="js-searchForStore" id="js-searchForStoreCode">
+    支店名: <input type="text" name="name" value="" class="js-searchForStore" id="js-searchForStoreName">
+    <ul id="js-storeData"></ul>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+    <script type="text/javascript">
+      $('#js-searchForBank').change(function() {
+        const data = {
+          name: $('#js-searchForBank').val(),
+        }
+        $.ajax({
+          type: 'GET',
+          url: 'https://bankcode-api.appspot.com/api/bank/JP',
+          data: data,
+          dataType: 'jsonp',
+        })
+        .done(function(response) {
+          console.log(response)
+          let html = '';
+          for(let resNum = 0; resNum < response.data.length; resNum = resNum + 1) {
+            const res = response.data[resNum];
+            html = html + '<li>' + res.code + ': ' + res.name + '</li>';
+          }
+          $('#js-bankData').html(html);
+        })
+        .fail(function(error) {
+          console.log(error);
+        });
+      });
+
+      $('.js-searchForStore').change(function() {
+        const code = $('#js-searchForStoreCode').val();
+        const data = {
+          name: $('#js-searchForStoreName').val(),
+        }
+        $.ajax({
+          type: 'GET',
+          url: 'https://bankcode-api.appspot.com/api/bank/JP/' + code,
+          data: data,
+          dataType: 'jsonp',
+        })
+        .done(function(response) {
+          console.log(response)
+          let html = '';
+          for(let resNum = 0; resNum < response.data.length; resNum = resNum + 1) {
+            const res = response.data[resNum];
+            html = html + '<li>' + res.code + ': ' + res.name + '</li>';
+          }
+          $('#js-storeData').html(html);
+        })
+        .fail(function(error) {
+          console.log(error);
+        });
+      });
+    </script>
+  </body>
+</html>
