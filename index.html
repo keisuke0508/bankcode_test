@@ -28,7 +28,7 @@
           dataType: 'jsonp',
         })
         .done(function(response) {
-          console.log(response)
+          console.log(response);
           let html = '';
           for(let resNum = 0; resNum < response.data.length; resNum = resNum + 1) {
             const res = response.data[resNum];
